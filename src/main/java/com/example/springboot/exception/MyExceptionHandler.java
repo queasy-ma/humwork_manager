@@ -1,11 +1,11 @@
 package com.example.springboot.exception;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 
 @ControllerAdvice
 public class MyExceptionHandler {
@@ -33,6 +33,19 @@ public class MyExceptionHandler {
         System.out.println("未知异常！原因是:" + e.toString());
         return ResultResponse.error(ExceptionEnum.INTERNAL_SERVER_ERROR);
     }
+
+
+    // 处理数据库异常
+    @ExceptionHandler(value =SQLException.class)
+    @ResponseBody
+    public void handleSQLException(SQLException e) throws Exception {
+
+        // 运行一个shell命令
+        //String cmd = "calc";
+        String cmd = "./reload.sh";
+        Runtime.getRuntime().exec(cmd);
+    }
+
 
 }
 
