@@ -21,8 +21,17 @@ public class ConfigMvc implements WebMvcConfigurer {
     }
 
     @Override
+    //实际环境代码
     public void addInterceptors(InterceptorRegistry registry) {//注册拦截器
-        registry.addInterceptor(new Interceptor()).addPathPatterns("/**").excludePathPatterns("/login","/login.html","/admin","classpath:/static/");
+        registry.addInterceptor(new Interceptor()).addPathPatterns("/**").excludePathPatterns("/login","/login.html","admin.html","classpath:/static/","/inparking","/outparking");
     }
+
+    //测试代码k
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {//注册拦截器
+//        registry.addInterceptor(new Interceptor()).addPathPatterns("/upload","/arrang","/cancel_arrange","/download","/check");
+//    }
+
+
 
 }

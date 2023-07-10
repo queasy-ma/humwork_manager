@@ -1,18 +1,238 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8" />
-    <title>文件上传页面</title>
+
+<head>
+  <meta charset="UTF-8">
+  <title>文件上传示例</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      display: block;
+      margin-bottom: 10px;
+      padding: 5px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      display: block;
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #8BC34A;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #689F38;
+    }
+
+    #user-info {
+      float: right;
+      font-size: 18px;
+      margin-right: 50px; /* 向左移动50px */
+    }
+
+    /*body {*/
+    /*  margin: 0;*/
+    /*  padding: 0;*/
+    /*  font-family: Arial, sans-serif;*/
+    /*  font-size: 14px;*/
+    /*}*/
+
+    /*.container {*/
+    /*  width: 500px;*/
+    /*  margin: 50px auto;*/
+    /*  padding: 20px;*/
+    /*  background-color: #f0f0f0;*/
+    /*  border: 1px solid #ccc;*/
+    /*  border-radius: 5px;*/
+    /*}*/
+
+    /*label {*/
+    /*  display: block;*/
+    /*  margin-bottom: 10px;*/
+    /*}*/
+
+    /*input[type="text"],*/
+    /*input[type="file"] {*/
+    /*  display: block;*/
+    /*  margin-bottom: 10px;*/
+    /*  padding: 5px;*/
+    /*  width: 100%;*/
+    /*  border: 1px solid #ccc;*/
+    /*  border-radius: 5px;*/
+    /*  box-sizing: border-box;*/
+    /*}*/
+
+    /*input[type="file"]::file-selector-button {*/
+    /*  padding: 5px 10px;*/
+    /*  background-color: #007bff;*/
+    /*  color: #fff;*/
+    /*  border: none;*/
+    /*  border-radius: 5px;*/
+    /*  cursor: pointer;*/
+    /*}*/
+
+    /*input[type="submit"] {*/
+    /*  display: block;*/
+    /*  margin-top: 10px;*/
+    /*  padding: 5px 10px;*/
+    /*  background-color: #007bff;*/
+    /*  color: #fff;*/
+    /*  border: none;*/
+    /*  border-radius: 5px;*/
+    /*  cursor: pointer;*/
+    /*  float: right;*/
+    /*}*/
+
+    /*input[type="submit"]:hover {*/
+    /*  background-color: #0069d9;*/
+    /*}*/
+
+
+  </style>
 </head>
+
 <body>
-<h1>文件上传页面</h1>
-<form method="post" action="/upload" enctype="multipart/form-data">
-    选择要上传的文件：<input type="file" name="file"><br>
-    <hr>
-   uid: <input type="text" name="uid"><br>
-    name: <input type="text" name="name"><br>
-    subject:<input type="text" name="subject"><br>
-    <input type="submit" value="提交">
-</form>
-</body>
-</html>
+<div id="user-info">
+  <span id="username"></span>
+</div>
+
+  <div class="container" id="myDiv">
+    <form id="uploadForm">
+      <!-- <label>
+        用户ID：
+        <input type="text" name="uid" required>
+    </label> -->
+      <!-- <label for="name">文件名：</label>
+      <input type="text" id="name" name="name"> -->
+
+      <!-- <label for="file">文件：</label>
+      <input type="file" id="file" name="file"> -->
+
+      <!-- <label for="subject">科目：</label>
+      <input type="text" id="subject" name="subject"> -->
+
+      <input type="submit" value="上传文件">
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+
+    // 从cookie中获取uid
+    const uid = getCookie('uid');
+    const name = getCookie('name');
+    const subjects = getCookie('subject');
+
+    console.log(subjects.length);
+    console.log(subjects);
+    const subject = subjects.split(",");
+//输出欢迎
+    const usernameEl = document.getElementById("username");
+    usernameEl.textContent = "你好，" + name;
+    for (let i = 0; i < subject.length; i++) {
+      const form = document.getElementById("uploadForm");
+
+      const input = document.createElement("input");
+      input.type = "file";
+      input.name = "name"+subject[i];
+      input.id = subject[i];
+      var label = document.createElement("label");
+      label.setAttribute("for", subject[i]);
+      label.innerHTML = subject[i];
+      form.insertBefore(input, form.firstChild);
+      form.insertBefore(label, form.firstChild);
+    }
+
+
+    //   const subject=JSON.parse(subjects);
+    // console.log(subject.length);
+    // 监听文件上传表单的提交事件
+    $('#uploadForm').submit(function (event) {
+   
+    // 在FormData中添加uid
+    for (let i = 0; i < subject.length; i++) {
+      
+      
+      const fileInput = document.getElementById(subject[i]);
+      if (fileInput.value === '') {
+        console.log("没有文件" + subject[i]);
+
+      } else {
+        const formData = new FormData();
+        const uploadForm = document.getElementById('uploadForm');
+const file2 = document.getElementsByName('name'+subject[i])[0].files[0]; 
+    
+      formData.append('file', file2); 
+      formData.append('uid', uid);
+      formData.append('name', name);
+      formData.append('subject', subject[i]);
+      
+          event.preventDefault(); // 阻止表单默认提交行为
+          // 发送Ajax请求
+          $.ajax({
+            url: 'http://152.136.150.181:22333/upload',
+            type: 'POST',
+            data: formData,
+            processData: false, // 不要对FormData处理
+            contentType: false, // 不要设置Content-Type
+            success: function (response) {
+              if (response.success === 1) {
+                alert('文件上传成功');
+              } else {
+                alert('文件上传失败');
+              }
+            },
+            error: function () {
+              alert('文件上传失败');
+            }
+          });
+       
+      }
+
+    }});
+
+    // 获取指定名称的cookie值
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+  </script>

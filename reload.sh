@@ -1,2 +1,2 @@
 killall java
-java -jar ./test.jar > ./temp.txt
+java -jar ./app.jar > ./log.txt

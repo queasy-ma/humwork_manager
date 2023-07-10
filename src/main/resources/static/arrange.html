@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>管理员布置文件</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    form {
+      margin: 20px 0;
+    }
+    label {
+      display: inline-block;
+      width: 100px;
+      text-align: right;
+      margin-right: 10px;
+    }
+    input[type="text"] {
+      width: 300px;
+      padding: 5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="submit"] {
+      padding: 5px 10px;
+      font-size: 16px;
+      background-color: #428bca;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+  </style>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // 监听表单提交事件
+      $("form").submit(function(event) {
+        event.preventDefault(); // 阻止表单默认提交行为
+         const subject = $("input[name='subject']").val(); // 获取用户输入的文件名
+        // var params = $('#container').serialize();
+        // 发送 POST 请求
+        $.ajax({
+          url: "http://152.136.150.181:22333/arrange",
+          type: "GET",
+          data:{subject: subject},
+          // data:params,
+          // contentType: "application/json",
+          dataType: "json",
+          success: function(data) {
+            if (data.success === 1) {
+              alert(data.result); // 弹出成功提示信息
+            } else {
+              alert(data.result); // 弹出失败提示信息
+            }
+          },
+          error: function(xhr, status, error) {
+            
+            alert("布置文件失败！");
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>管理员布置文件</h1>
+    <form>
+      <div>
+        <label for="subject">下发任务名：</label>
+        <input type="text" name="subject" id="subject" required>
+      </div>
+      <div>
+        <input type="submit" value="布置文件">
+      </div>
+    </form>
+  </div>
+</body>
+</html>

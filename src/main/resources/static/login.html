@@ -1,78 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="http://152.136.150.181:2333/login"></script>
-    <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        div{
-            overflow:hidden;
-            width: 500px;
-            height: 200px;
-            border: 1px solid #000;
-            text-align: center;
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
         }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none !important;
-            margin: 0;
+
+        div {
+            width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: inline-block;
+            width: 60px;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            display: inline-block;
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="button"] {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="button"]:hover {
+            background-color: #0069d9;
+        }
+
+        #listShow {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
 </head>
+
 <body>
-    <div >
+    <div>
         <form id="login">
-           <label for="1">账号：</label>
-         <input type="number" class="c2" name="uid" maxlength="9" ><br>
-         <input type="button" class="c1" name="submit" value="登录" onclick="Ajax()">
+            <label for="1">账号：</label>
+            <input type="number" class="c2" name="uid" maxlength="9"><br>
+            <input type="button" class="c1" name="submit" value="登录" onclick="Ajax()">
         </form>
     </div>
-    <div id ="listShow"></div>
+    <div id="listShow"></div>
     <script>
-          var Ajax = function () {
-            var params=$('#login').serialize();
+        var Ajax = function () {
+            var params = $('#login').serialize();
             console.log(params);
-        $.ajax({
-            url: "http://152.136.150.181:2333/login",
-            type: "POST",
-            async:true,
-            dataType:"json",
-            data:params,
-            // data:{'uid':2006002130},
-            success: function (res) {
-                console.log(1);
-            console.log(res.user_name);
-            console.log(res.user_id);
-            console.log(res.subjects);
-            if (window.localStorage){
-                localStorage.setItem("res1",JSON.stringify(res));
-                var data=localStorage.getItem("res1");
-                // console.log(typeof data);
-                data=JSON.parse(data);
-                console.log(data.user_name);
-            }
-            var sum=0;
-            for(var i=0;i<res.subjects.length;i++)
-            {
-                sum++;
-                console.log("sum"+sum);
-            }
-            if(sum==0){
-                window.location.href="l_1.html";
-            }
-            
-            
-            },
-            error: function (res) {
-                console.log("发生错误");
-                console.log(res);
-            }
-        })
-    }
-    
+            $.ajax({
+                url: "http://152.136.150.181:22333/login",
+                type: "POST",
+                async: true,
+                dataType: "json",
+                data: params,
+                // data:{'uid':2006002130},
+                success: function (res) {
+                    //    document.cookie = "uid=" + res.user_id + ";name=" + res.user_name + ";subject=" + res.subjects + ";path=/";
+                    document.cookie = "name=" + res.user_name + ";path=/";
+                    document.cookie = "uid=" + res.user_id + ";path=/";
+                    document.cookie = "subject=" + res.subjects + ";path=/";
+                    // 显示用户名
+                    window.location.href = "http://152.136.150.181:22333/upload.html";
+                    console.log(res.user_name);
+                    console.log(res.user_id);
+                    console.log(res.subjects);
+                    console.log(res.subjects[1]);
+
+
+                },
+                error: function (res) {
+                    console.log("发生错误");
+                    console.log(res);
+                }
+            })
+        }
+
     </script>
 </body>
+
 </html>

@@ -40,6 +40,7 @@ public class DownloadController {
             throw new BizException("400","下载文件不存在！");
         }
         response.reset();
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/octet-stream");
         response.setCharacterEncoding("utf-8");
         response.setContentLength((int) zipfile.length());

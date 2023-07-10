@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>管理员登录</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* 背景颜色 */
+
+        a {
+            text-decoration: none;
+            color:#4a31ac;
+            margin-right: -800px;
+            margin-left: 800px;
+            font-size: 25px;
+        }
+
+        a:hover {
+            color: #4CAF50;
+        }
+        body {
+            background-color: #f8f8f8;
+        }
+
+        /* 输入框样式 */
+        input[type=text],
+        input[type=password] {
+            border: 1px solid #d9d9d9;
+            border-radius: 3px;
+            padding: 10px;
+        }
+
+        /* 按钮样式 */
+        button {
+            background: linear-gradient(to bottom, #a58a9b, #37803e);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(to bottom, #37803e, #4CAF50);
+        }
+
+        /* 表格样式 */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        /* 字体样式 */
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* 错误信息样式 */
+        /* .error-message {
+      background-color: #ffe6e6;
+      border: 1px solid #ff9999;
+      color: #ff4d4d;
+      padding: 10px;
+      font-size: 14px;
+    } */
+        #result {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        #hi{
+            height: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card" id="exeu">
+        <h2>管理员登录</h2>
+        <form id="login-form">
+            <label for="username">用户名</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">密码</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">登录</button>
+        </form>
+        <!-- <div id="error-message" class="error-message"></div> -->
+    </div>
+</div>
+<div id="h"></div>
+<div id="hi"></div>
+<div id="result"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#login-form").submit(function (event) {
+            event.preventDefault();
+            // const formData = new FormData(this);
+            var params = $('#login-form').serialize();
+            console.log("hh");
+            $.ajax({
+                type: "GET",
+                async: true,
+                url: "http://152.136.150.181:22333/admin",
+                dataType: "json",
+                contentType: false,
+                data: params,
+                // data:formData,
+                success: function (data) {
+                    // 处理成功返回的数据
+                    ;
+
+                    $('#login-form').hide();
+                    $('#exeu').hide();
+                    if (data.code == 200) {
+                        // 构造表格的表头
+                        // 添加两个超链接
+                        $('#h').after('<a href="http://152.136.150.181:22333/arrange.html"><button>发布文件</button></a> ');
+
+                        $('#h').after('<a href="http://152.136.150.181:22333/cancel_arrange.html"><button>撤销文件</button></a> ');
+
+                        $('#h').after('<a href="http://152.136.150.181:22333/download.html"><button>下载文件</button></a> ');
+                        $('#h').after('<a href="http://152.136.150.181:22333/check.html"><button>文件查重</button></a> ');
+                        $('#exeu').after('<h1>管理系统</h1>');
+                        // 构造表格的表头
+                        let tableHeader = '<tr><th>UID</th><th>User_name</th>';
+                        for (let i = 0; i < data.subjects.length; i++) {
+                            tableHeader += '<th>' + data.subjects[i] + '</th>';
+                        }
+                        tableHeader += '</tr>';
+
+                        // 构造表格的内容
+                        let tableContent = '';
+                        for (let i = 0; i < data.users.length; i++) {
+                            tableContent += '<tr>';
+                            tableContent += '<td>' + data.users[i].uid + '</td>';
+                            tableContent += '<td>' + data.users[i].user_name + '</td>';
+                            for (let j = 0; j < data.subjects.length; j++) {
+                                let subject = data.subjects[j];
+                                let status = data.users[i][subject] === 1 ? '已交' : '未交';
+                                tableContent += '<td>' + status + '</td>';
+                            }
+                            tableContent += '</tr>';
+                        }
+
+                        // 将表格添加到页面上
+                        let table = '<table><thead>' + tableHeader + '</thead><tbody>' + tableContent + '</tbody></table>';
+                        $('#result').html(table);
+
+
+                    }
+                    // 处理失败返回的数据
+                    else if (data.code === 403) {
+                        alert(data.message);
+                    }
+                },
+                error: function () {
+                    alert('请求失败！');
+                }
+            });
+
+        });
+    });
+</script>
+</body>
+
+</html>

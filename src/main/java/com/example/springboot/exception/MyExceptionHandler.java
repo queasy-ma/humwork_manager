@@ -39,11 +39,22 @@ public class MyExceptionHandler {
     @ExceptionHandler(value =SQLException.class)
     @ResponseBody
     public void handleSQLException(SQLException e) throws Exception {
+        String osName = System.getProperty("os.name");
+        if (osName.startsWith("Windows")) {
+            // 运行一个shell命令
+            //String cmd = "calc";
+            String cmd = "./reload.bat";
+            Runtime.getRuntime().exec(cmd);
+            System.out.println("重启..\n");
+        } else if (osName.startsWith("Linux")) {
+            // 运行一个shell命令
+            //String cmd = "calc";
+            String sh = "./reload.sh";
+            Runtime.getRuntime().exec(sh);
+            System.out.println("重启..\n");
+        }
 
-        // 运行一个shell命令
-        //String cmd = "calc";
-        String cmd = "./reload.sh";
-        Runtime.getRuntime().exec(cmd);
+
     }
 
 

@@ -35,14 +35,21 @@ public class ArrangeController {
         String dirname = uploadFilePath +"/"+ subject;
         Path path = Paths.get(dirname);
 
-        if(i != 0)
+        if(i != 0 )
         {
             throw new BizException("400","不能重复布置！");
+
         }
         else if(Files.exists(path))
         {
             throw new BizException("400","文件夹已经存在！");
         }
+//        if(i != 0 || Files.exists(path))
+//        {
+//            JSONObject object = new JSONObject();
+//            object.put("success", 0);
+//            object.put("result","布置失败，重复布置或文件夹已经存在");
+//        }
         else
         {
             jdbcTemplate.update("INSERT INTO workdata (subject)VALUES (?)",subject); //更新workdata表
